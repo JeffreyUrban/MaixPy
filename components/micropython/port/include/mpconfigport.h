@@ -215,6 +215,7 @@ extern const struct _mp_print_t mp_debug_print;
 
 
 // extended modules
+#define MICROPY_PY_UASYNCIO                 (1)
 #define MICROPY_PY_UCTYPES                  (1)
 #define MICROPY_PY_UZLIB                    (1)
 #define MICROPY_PY_UJSON                    (1)

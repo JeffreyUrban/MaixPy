@@ -67,3 +67,7 @@ lib_sipeed_kpu/
 components/nncase/
 
 !components/micropython/port/src/speech/maix_asr/libmaix_asr.a
+
+# Python Virtual Environment for build
+_venv/
+
