@@ -140,7 +140,9 @@ mp_obj_t maix_config_init()
     // printf("%s\r\n", __func__);
     // unit_test_json_config();
     static maix_config_t tmp;
-    mp_obj_t module_obj = mp_module_get(MP_QSTR_ujson);
+
+    // TODO: Should this be mp_module_get_loaded_or_builtin?
+    mp_obj_t module_obj = mp_module_get_builtin(MP_QSTR_ujson);
     if (module_obj != MP_OBJ_NULL)
     {
         // mp_printf(&mp_plat_print, "import josn\r\n");
