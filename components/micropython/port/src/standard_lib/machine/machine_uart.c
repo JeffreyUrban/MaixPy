@@ -166,7 +166,7 @@ int uart_rx_irq(void *ctx)
 						// Handle interrupt coming in on a UART REPL
 						if (read_tmp == mp_interrupt_char) {
 							if (MP_STATE_VM(mp_pending_exception) == MP_OBJ_NULL) {
-								mp_keyboard_interrupt();
+								mp_sched_keyboard_interrupt();
 							} else {
 								MP_STATE_VM(mp_pending_exception) = MP_OBJ_NULL;
 								//pendsv_object = &MP_STATE_VM(mp_kbd_exception);
