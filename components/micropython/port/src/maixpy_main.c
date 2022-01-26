@@ -700,7 +700,9 @@ int maixpy_main()
   sysctl_set_spi0_dvp_data(1);
   /* open core 1 */
   // printk("open second core...\r\n");
-  register_core1(core1_function, 0);
+  // TODO: See if commenting this out prevents the core 1 core dump. Appears core1_function does nothing.
+  //       Should fix this, in case we want to use core 1.
+  //  register_core1(core1_function, 0);
 
 #if MICROPY_PY_THREAD
   xTaskCreateAtProcessor(0,                     // processor
