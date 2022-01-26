@@ -83,34 +83,26 @@ else:
 
 # detect boot.py
 boot_py = '''
-from fpioa_manager import *
-import os, Maix, lcd, image
-from Maix import FPIOA, GPIO
-
-test_pin=16
-fpioa = FPIOA()
-fpioa.set_function(test_pin,FPIOA.GPIO7)
-test_gpio=GPIO(GPIO.GPIO7,GPIO.IN)
-lcd.init(freq=15000000,color=(255,0,0))
-fm.register(board_info.PIN17,fm.fpioa.GPIO0)
-led=GPIO(GPIO.GPIO0,GPIO.OUT)
-led.value(1)
-lcd.rotation(1)
-lcd.clear((255,0,0))
-lcd.draw_string(lcd.width()//2-68,lcd.height()//2-4, "Welcome to MaixPy", lcd.WHITE, lcd.RED)
-if test_gpio.value() == 0:
-    lcd.rotation(2)
-    print('PIN 16 pulled down, enter test mode')
-    import sensor
-    import image
-    sensor.reset()
-    sensor.set_pixformat(sensor.RGB565)
-    sensor.set_framesize(sensor.QVGA)
-    sensor.run(1)
-    lcd.freq(16000000)
-    while True:
-        img=sensor.snapshot()
-        lcd.display(img)
+try:
+    import os, Maix, gc, lcd, image
+    from Maix import FPIOA, GPIO
+    gc.collect()
+    lcd.init(freq=15000000)
+    fm.register(17,fm.fpioa.GPIO0)
+    led=GPIO(GPIO.GPIO0,GPIO.OUT)
+    led.value(1)
+    loading = image.Image(size=(lcd.width(), lcd.height()))
+    loading.draw_rectangle((0, 0, lcd.width(), lcd.height()), fill=True, color=(255, 0, 0))
+    info = "Welcome to MaixPy"
+    loading.draw_string(int(lcd.width()//2 - len(info) * 5), (lcd.height())//4, info, color=(255, 255, 255), scale=2, mono_space=0)
+    v = sys.implementation.version
+    vers = 'V{}.{}.{} : maixpy.sipeed.com'.format(v[0],v[1],v[2])
+    loading.draw_string(int(lcd.width()//2 - len(info) * 6), (lcd.height())//3 + 20, vers, color=(255, 255, 255), scale=1, mono_space=1)
+    lcd.display(loading)
+    del loading, v, info, vers
+    gc.collect()
+finally:
+    gc.collect()
 '''
 
 f = open("/flash/boot.py", "wb")
@@ -121,3 +113,55 @@ print(banner)
 with open("/flash/boot.py") as f:
     exec(f.read())
 
+
+import json
+
+config = {
+    "type": "twatch",
+    "lcd": {
+        "height": 240,
+        "width": 240,
+        "invert": 1,
+        "dir": 96,
+        "lcd_type": 0
+    },
+    "board_info": {
+        'BOOT_KEY': 16,
+        'LED_R': 12,
+        'LED_G': 13,
+        'LED_B': 14,
+        'WIFI_TX': 6,
+        'WIFI_RX': 7,
+        'WIFI_EN': 8,
+        'I2S0_MCLK': 13,
+        'I2S0_SCLK': 21,
+        'I2S0_WS': 18,
+        'I2S0_IN_D0': 35,
+        'I2S0_OUT_D2': 34,
+        'SPI0_MISO': 26,
+        'SPI0_CLK': 27,
+        'SPI0_MOSI': 28,
+        'SPI0_CS0': 29,
+        'MIC0_WS': 30,
+        'MIC0_DATA': 31,
+        'MIC0_BCK': 32,
+        'I2S_WS': 33,
+        'I2S_DA': 34,
+        'I2S_BCK': 35
+    }
+}
+
+cfg = json.dumps(config)
+print(cfg)
+
+try:
+    with open('/flash/config.json', 'rb') as f:
+        tmp = json.loads(f.read())
+    # print(tmp)
+    if tmp["type"] != config["type"]:
+        raise Exception('config.json no exist')
+except Exception as e:
+    with open('/flash/config.json', "w") as f:
+        f.write(cfg)
+    import machine
+    machine.reset()

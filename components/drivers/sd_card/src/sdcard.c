@@ -100,13 +100,15 @@ static void sd_read_data(uint8_t *data_buff, uint32_t length)
 
 static void sd_write_data_dma(uint8_t *data_buff)
 {
-    spi_init(SD_SPI_DEVICE, SPI_WORK_MODE_0, SPI_FF_STANDARD, 32, 1);
+    // spi_init(SD_SPI_DEVICE, SPI_WORK_MODE_0, SPI_FF_STANDARD, 32, 1); misaligned error
+    spi_init(SD_SPI_DEVICE, SPI_WORK_MODE_0, SPI_FF_STANDARD, 8, 0);
     spi_send_data_standard_dma(SD_DMA_CH, SD_SPI_DEVICE, SD_SS, NULL, 0, (uint8_t *)(data_buff), 128 * 4);
 }
 
 static void sd_read_data_dma(uint8_t *data_buff)
 {
-    spi_init(SD_SPI_DEVICE, SPI_WORK_MODE_0, SPI_FF_STANDARD, 32, 1);
+    // spi_init(SD_SPI_DEVICE, SPI_WORK_MODE_0, SPI_FF_STANDARD, 32, 1); misaligned error
+    spi_init(SD_SPI_DEVICE, SPI_WORK_MODE_0, SPI_FF_STANDARD, 8, 0);
     spi_receive_data_standard_dma(-1, SD_DMA_CH, SD_SPI_DEVICE, SD_SS, NULL, 0, data_buff, 128 * 4);
 }
 
@@ -164,7 +166,7 @@ static void sd_end_cmd(void)
 static uint8_t sd_get_response(void)
 {
     uint8_t result;
-    uint16_t timeout = 0xFFFF;
+    uint16_t timeout = 0xFFFF; // min: 0x5f
     /*!< Check if response is got or a timeout is happen */
     while (timeout--)
     {

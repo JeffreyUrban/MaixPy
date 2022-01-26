@@ -10,7 +10,9 @@
 typedef enum{
     MACHINE_I2C_MODE_MASTER = 0,
     MACHINE_I2C_MODE_SLAVE,
+#if MICROPY_PY_MACHINE_SW_I2C
     MACHINE_I2C_MODE_MASTER_SOFT,
+#endif
     MACHINE_I2C_MODE_MAX
 } machine_i2c_mode_t;
 
@@ -27,6 +29,8 @@ typedef struct _machine_hard_i2c_obj_t {
     mp_obj_t              on_event;
     int                   pin_scl;
     int                   pin_sda; 
+    int                   gpio_scl;
+    int                   gpio_sda;
     int                   us_delay;
 } machine_hard_i2c_obj_t;
 

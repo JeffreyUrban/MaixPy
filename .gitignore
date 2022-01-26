@@ -71,3 +71,6 @@ components/nncase/
 # Python Virtual Environment for build
 _venv/
 
+# IDE
+.idea/
+
