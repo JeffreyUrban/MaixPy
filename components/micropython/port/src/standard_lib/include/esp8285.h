@@ -28,7 +28,7 @@
 #include "py/mphal.h"
 #include "py/objstr.h"
 #include "extmod/misc.h"
-#include "lib/netutils/netutils.h"
+#include "shared/netutils/netutils.h"
 
 #include "utils.h"
 #include "modmachine.h"

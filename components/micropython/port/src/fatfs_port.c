@@ -27,7 +27,7 @@
  */
 
 #include "lib/oofatfs/ff.h"
-#include "lib/timeutils/timeutils.h"
+#include "shared/timeutils/timeutils.h"
 #include "rtc.h"
 DWORD get_fattime(void) {
 

@@ -340,7 +340,9 @@ ide_dbg_status_t ide_dbg_receive_data(machine_uart_obj_t* uart, uint8_t* data)
                     // Note: setting pendsv explicitly here because the VM is probably
                     // waiting in REPL and the soft interrupt flag will not be checked.
                     // nlr_jump(mp_const_ide_interrupt);
-                    MP_STATE_VM(mp_pending_exception) = mp_const_ide_interrupt;//MP_OBJ_FROM_PTR(&MP_STATE_VM(mp_kbd_exception));
+
+                    // TODO: This clears compile errors, but may not be correct.
+                    MP_STATE_VM(mp_emergency_exception_obj) = ide_exception;//MP_OBJ_FROM_PTR(&MP_STATE_VM(mp_kbd_exception));
                     #if MICROPY_ENABLE_SCHEDULER
                     if (MP_STATE_VM(sched_state) == MP_SCHED_IDLE) {
                         MP_STATE_VM(sched_state) = MP_SCHED_PENDING;
@@ -357,7 +359,9 @@ ide_dbg_status_t ide_dbg_receive_data(machine_uart_obj_t* uart, uint8_t* data)
                 //save to FS
                 ide_file_save_status = 5;
                 mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
-                MP_STATE_VM(mp_pending_exception) = mp_const_ide_interrupt;//MP_OBJ_FROM_PTR(&MP_STATE_VM(mp_kbd_exception));
+
+                // TODO: This clears compile errors, but may not be correct.
+                MP_STATE_VM(mp_emergency_exception_obj) = ide_exception;//MP_OBJ_FROM_PTR(&MP_STATE_VM(mp_kbd_exception));
                 #if MICROPY_ENABLE_SCHEDULER
                 if (MP_STATE_VM(sched_state) == MP_SCHED_IDLE) {
                     MP_STATE_VM(sched_state) = MP_SCHED_PENDING;
@@ -481,7 +485,9 @@ ide_dbg_status_t ide_dbg_dispatch_cmd(machine_uart_obj_t* uart, uint8_t* data)
                     // interrupt running code by raising an exception
                     mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
                     // pendsv_nlr_jump_hard(mp_const_ide_interrupt);
-                    MP_STATE_VM(mp_pending_exception) = mp_const_ide_interrupt; //MP_OBJ_FROM_PTR(&MP_STATE_VM(mp_kbd_exception));
+
+                    // TODO: This clears compile errors, but may not be correct.
+                    MP_STATE_VM(mp_emergency_exception_obj) = ide_exception; //MP_OBJ_FROM_PTR(&MP_STATE_VM(mp_kbd_exception));
                     #if MICROPY_ENABLE_SCHEDULER
                     if (MP_STATE_VM(sched_state) == MP_SCHED_IDLE) {
                         MP_STATE_VM(sched_state) = MP_SCHED_PENDING;
@@ -696,7 +702,9 @@ bool ide_dbg_interrupt_main()
         // interrupt running code by raising an exception
         mp_obj_exception_clear_traceback(mp_const_ide_interrupt);
         // pendsv_nlr_jump_hard(mp_const_ide_interrupt);
-        MP_STATE_VM(mp_pending_exception) = mp_const_ide_interrupt; //MP_OBJ_FROM_PTR(&MP_STATE_VM(mp_kbd_exception));
+
+        // TODO: This clears compile errors, but may not be correct.
+        MP_STATE_VM(mp_emergency_exception_obj) = ide_exception; //MP_OBJ_FROM_PTR(&MP_STATE_VM(mp_kbd_exception));
         #if MICROPY_ENABLE_SCHEDULER
         if (MP_STATE_VM(sched_state) == MP_SCHED_IDLE) {
             MP_STATE_VM(sched_state) = MP_SCHED_PENDING;

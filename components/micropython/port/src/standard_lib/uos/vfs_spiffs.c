@@ -38,7 +38,7 @@
 #include "py/binary.h"
 #include "py/objarray.h"
 
-#include "lib/timeutils/timeutils.h"
+#include "shared/timeutils/timeutils.h"
 
 #include "vfs_spiffs.h"
 #include "spiffs_config.h"

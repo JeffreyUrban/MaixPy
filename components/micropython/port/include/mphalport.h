@@ -3,7 +3,7 @@
 #define INCLUDED_MPHALPORT_H
 
 #include "py/ringbuf.h"
-#include "lib/utils/interrupt_char.h"
+#include "shared/runtime/interrupt_char.h"
 #include "mpconfigport.h"
 
 extern ringbuf_t stdin_ringbuf;

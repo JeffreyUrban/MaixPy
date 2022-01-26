@@ -41,7 +41,7 @@
 #include "py/stream.h"
 #include "sleep.h"
 #include "timer.h"
-#include "lib/netutils/netutils.h"
+#include "shared/netutils/netutils.h"
 
 #if CONFIG_MAIXPY_WIZNET5K_ENABLE
 
